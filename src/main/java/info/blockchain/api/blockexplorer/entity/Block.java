@@ -2,7 +2,10 @@ package info.blockchain.api.blockexplorer.entity;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import info.blockchain.api.APIException;
+import info.blockchain.api.blockexplorer.BlockExplorer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class Block extends SimpleBlock {
     private long receivedTime;
     private String relayedBy;
     private List<Transaction> transactions;
+    private BlockExplorer blockExplorer;
 
     public Block (long height, String hash, long time, boolean mainChain, int version, String previousBlockHash, String merkleRoot, long bits, long fees, long nonce, long size, long index, long receivedTime, String relayedBy, List<Transaction> transactions) {
         super(height, hash, time, mainChain);
@@ -172,6 +176,24 @@ public class Block extends SimpleBlock {
     public List<Transaction> getTransactions () {
         return transactions;
     }
+
+
+    public List<String> getInputAddress(String HashTransaction) throws APIException, IOException
+    {
+        Transaction tx = blockExplorer.getTransaction(HashTransaction);
+        List<String> res = new ArrayList<String>();
+        for ( Input i : tx.getInputs())
+        {
+            res.add(i.getPreviousOutput().getAddress());
+            //System.out.println(i.getPreviousOutput().getValue());
+        }
+
+        return res ;
+
+    }
+
+
+
 
 
 }

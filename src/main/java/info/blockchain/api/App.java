@@ -4,9 +4,11 @@ import info.blockchain.api.blockexplorer.BlockExplorer;
 import info.blockchain.api.blockexplorer.entity.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class App {
+public class App
+{
 
     public static void main(String[] args) throws Exception
     {
@@ -24,16 +26,99 @@ public class App {
 
             List<Transaction> tx = block.getTransactions();
 
-            for (int j = 0; j < block.getTransactions().size(); j++)
+            for(int t = 0; t < block.getTransactions().size() ; t++)
             {
-                System.out.println("Hash des transactions " + j + " :  " + tx.get(j).getHash());
-                
+                List<Input> inputs = tx.get(t).getInputs();
+                if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
+                {
+                    System.out.println("Création monnaie");
+                    continue;
+                }
+                for (Input in : inputs)
+                {
+                    System.out.println("@Emetteur " + in.getPreviousOutput().getAddress());
+                    System.out.println("Montant Compte emetteur " + in.getPreviousOutput().getValue());
+
+                }
+                List<Output> outputs = tx.get(t).getOutputs();
+                for (Output out : outputs)
+                {
+                    System.out.println("@Recepteur " + out.getAddress());
+                    System.out.println("Montant compte recepteur " + out.getValue());
+                }
+
 
             }
+
+
         }
 
 
+
+
+
     }
-}
+    }
+
+
+
+/*
+        for (Transaction tx : transactions)
+        {
+            List<Input> inputs = tx.getInputs();
+            if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
+            {
+                continue;
+            }
+            for (Input in : inputs)
+            {
+                System.out.println(in.getPreviousOutput().getAddress());
+              //  wTx.write(generateInputRecord(tx.getIndex(), tx.getHash(),
+                 //       in.getPreviousOutput().getAddress(), in
+                   //             .getPreviousOutput().getValue())
+                     //   + "\n");
+            }
+            List<Output> outputs = tx.getOutputs();
+            for (Output out : outputs)
+            {
+             //   wTx.write(generateOutputRecord(tx.getIndex(), tx.getHash(),
+                //        out.getAddress(), out.getValue()) + "\n");
+            }
+        }
+
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
