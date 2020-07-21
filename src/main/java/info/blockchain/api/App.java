@@ -16,8 +16,9 @@ public class App
         BlockExplorer blockExplorer = new BlockExplorer();
 
 
-        for (int i = 78900; i < 78901; i++)
+        for (int i = 265851; i < 265852; i++)
         {
+
             Block block = blockExplorer.getBlock(i);
             System.out.println("Num block " + i);
             System.out.println("Hash block " + block.getHash());
@@ -31,7 +32,7 @@ public class App
                 List<Input> inputs = tx.get(t).getInputs();
                 if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
                 {
-                    System.out.println("Création monnaie");
+                    System.out.println("Création monnaie ");
                     continue;
                 }
                 for (Input in : inputs)
@@ -45,12 +46,12 @@ public class App
                 {
                     System.out.println("@Recepteur " + out.getAddress());
                     System.out.println("Montant compte recepteur " + out.getValue());
-                }
 
+                }
 
             }
 
-
+            System.out.println("##########################################");
         }
 
 
