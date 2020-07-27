@@ -63,56 +63,6 @@ public class ConnectNeo4J implements AutoCloseable
             }
         }
 
-        for(int j = debut; j < fin; j++)
-        {
-
-            final BlockExplorer blockExplorer = new BlockExplorer();
-            final Block block = blockExplorer.getBlock(j);
-            try ( Session session = driver.session() )
-            {
-
-                final int finalJ = j;
-
-
-                String greeting = session.writeTransaction(new TransactionWork<String>()
-                {
-                    @Override
-                    public String execute( Transaction tx )
-                    {
-                        Result result = tx.run("MERGE (block:block {num:$blocknum})\n" +
-                                        "MERGE (block)-[:coinbase]->(:output:coinbase)\n" +
-                                        "SET block.prevblock=$prevblocknum, \n" +
-                                        "block.time=$timestamp, \n" +
-                                        "block.txcount=$txcount \n" +
-                                        "MERGE (prevblock:block { num:$prevblocknum}) MERGE (block)-[:chain]->(prevblock)",
-
-                                parameters("blocknum", finalJ,
-                                        "prevblocknum", finalJ - 1 ,
-                                        "timestamp", block.getTimeHuman(),
-                                        "txcount", block.getTransactions().size()));
-                        // return result.single().get( 0 ).asString();
-
-                        return result.consume().toString();
-
-                    }
-                } );
-                System.out.println( greeting );
-            }
-        }
-
-    }
-
-
-    public Result makeFriends(final Transaction tx, final String person1, final String person2 )
-    {
-        return tx.run( "MATCH (a:Person {name: $person_1}) " +
-                        "MATCH (b:Person {name: $person_2}) " +
-                        "MERGE (a)-[:KNOWS]->(b)",
-                parameters( "person_1", person1, "person_2", person2 ) );
-    }
-
-
-
 
     }
 
@@ -120,6 +70,9 @@ public class ConnectNeo4J implements AutoCloseable
 
 
 
+
+
+}
 
 
 

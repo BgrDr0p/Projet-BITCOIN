@@ -10,13 +10,15 @@ import java.util.List;
 public class App
 {
 
+
+
     public static void main(String[] args) throws Exception
     {
 
         BlockExplorer blockExplorer = new BlockExplorer();
 
 
-        for (int i = 265851; i < 265852; i++)
+        for (int i = 1; i < 3; i++)
         {
 
             Block block = blockExplorer.getBlock(i);
@@ -30,6 +32,7 @@ public class App
             for(int t = 0; t < block.getTransactions().size() ; t++)
             {
                 List<Input> inputs = tx.get(t).getInputs();
+                List<Output> outputs = tx.get(t).getOutputs();
                 if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
                 {
                     System.out.println("Création monnaie ");
@@ -41,9 +44,10 @@ public class App
                     System.out.println("Montant Compte emetteur " + in.getPreviousOutput().getValue());
 
                 }
-                List<Output> outputs = tx.get(t).getOutputs();
+
                 for (Output out : outputs)
                 {
+
                     System.out.println("@Recepteur " + out.getAddress());
                     System.out.println("Montant compte recepteur " + out.getValue());
 

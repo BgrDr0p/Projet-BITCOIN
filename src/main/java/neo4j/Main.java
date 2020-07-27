@@ -10,7 +10,9 @@ public class Main {
     {
         try(ConnectNeo4J greeter = new ConnectNeo4J( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            greeter.printGreeting(0,30);
+          //  greeter.printGreeting(0,10);
+
+            greeter.printGreeting(0,124);
 
         }
         catch (Exception e )
