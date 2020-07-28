@@ -18,7 +18,7 @@ public class App
         BlockExplorer blockExplorer = new BlockExplorer();
 
 
-        for (int i = 1; i < 3; i++)
+        for (int i = 265850; i < 265851; i++)
         {
 
             Block block = blockExplorer.getBlock(i);
@@ -37,6 +37,7 @@ public class App
                 {
                     System.out.println("Création monnaie ");
                     continue;
+
                 }
                 for (Input in : inputs)
                 {
@@ -53,7 +54,15 @@ public class App
 
                 }
 
+              //  List<String> r = block.getInputAddress("b8b3afe95a71839fdd79271ba29c4fe9504019fcf8da98e14d42d681db908b5c");
+             //  System.out.println("ici " + r.toString());
+
+
+
             }
+
+
+
 
             System.out.println("##########################################");
         }

@@ -2,22 +2,37 @@ package neo4j;
 
 
 import org.neo4j.driver.Transaction;
+import org.neo4j.driver.types.Node;
 
 public class Main {
 
 
     public static void main( String... args ) throws Exception
     {
-        try(ConnectNeo4J greeter = new ConnectNeo4J( "bolt://localhost:7687", "neo4j", "root" ) )
-        {
-          //  greeter.printGreeting(0,10);
+      //  try(ConnectNeo4J greeter = new ConnectNeo4J( "bolt://localhost:7687", "neo4j", "root" ) )
+      //  {
 
-            greeter.printGreeting(0,124);
+       //   greeter.addEmployAndMakeFriends();
+     //   }
+     //   catch (Exception e )
+      //  {
+      //      e.printStackTrace();
+      //  }
 
-        }
-        catch (Exception e )
-        {
-            e.printStackTrace();
-        }
+
+         try(GraphManager greeter = new GraphManager( "bolt://localhost:7687", "neo4j", "root" ) )
+         {
+
+       //   greeter.addEmployAndMakeFriends();
+             greeter.insertBloc(123,145);
+          }
+         catch (Exception e )
+          {
+             e.printStackTrace();
+         }
+
+
+
+
     }
 }

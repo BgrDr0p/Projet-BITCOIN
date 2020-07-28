@@ -184,6 +184,7 @@ public class Block extends SimpleBlock {
         List<String> res = new ArrayList<String>();
         for ( Input i : tx.getInputs())
         {
+
             res.add(i.getPreviousOutput().getAddress());
             //System.out.println(i.getPreviousOutput().getValue());
         }
