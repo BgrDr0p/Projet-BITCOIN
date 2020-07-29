@@ -58,16 +58,37 @@ public class GraphManager implements AutoCloseable
 
                         txNEO4J.run("MATCH (block :block {hash:'" + block.getHash() + "'})\n" +
                                 "MERGE (tx:tx {txid:'"+ txBloc.get(t).getHash() + "'})\n" +
-                                "MERGE (tx)-[:inc {i:'"+t +"'}]->(block) \n" +
-                                "SET tx += {tx}"
-                        );
+                                "MERGE (tx)-[:inc {i:'"+ t +"'}]->(block)" );
+                        for (Input in : inputs)
+                        {
+
+                            if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
+                            {
+                                String node = "COINBASE";
+                                txNEO4J.run("MERGE (tx:tx { txid :'"+ txBloc.get(t).getHash() + "'}) \n " +
+                                        "MERGE(in:in { inid :'" + node+ "' }) \n" +
+                                        "MERGE (in) -[:in {in :'"+ inputs.indexOf(in) + "' }]->(tx)");
+                                continue;
+                            }
+                            else
+                            {
+                                txNEO4J.run("MERGE (tx:tx { txid :'"+ txBloc.get(t).getHash() + "'}) \n " +
+                                        "MERGE(value:value {value :'" + in.getPreviousOutput().getValueBTC()+ "' }) \n" +
+                                        "MERGE (value) -[:in {in :'"+ inputs.indexOf(in) + "' }]->(tx) \n" +
+                                        "MERGE (address:address {addressid :'" + in.getPreviousOutput().getAddress() + "'}) \n" +
+                                       // "MERGE (address) -[:unlocked_by {unlocked_by :'" + in.getPreviousOutput().getValueBTC() +"' }] ->(value)");
+                                        "MERGE (value) -[:unlocked_by {unlocked_by :'" + in.getPreviousOutput().getAddress() + "' }] ->(address)");
+                            }
+
+
+                        }
 
 
 
                     }
 
                   txNEO4J.commit();
-
+                    System.out.println(driver.session().toString());
 
 
 

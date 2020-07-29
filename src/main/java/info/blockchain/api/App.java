@@ -7,6 +7,8 @@ import info.blockchain.api.blockexplorer.entity.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static info.blockchain.api.Util.SATOSHI_IN_BTC;
+
 public class App
 {
 
@@ -18,7 +20,7 @@ public class App
         BlockExplorer blockExplorer = new BlockExplorer();
 
 
-        for (int i = 265850; i < 265851; i++)
+        for (int i = 357950; i < 357951; i++)
         {
 
             Block block = blockExplorer.getBlock(i);
@@ -33,19 +35,36 @@ public class App
             {
                 List<Input> inputs = tx.get(t).getInputs();
                 List<Output> outputs = tx.get(t).getOutputs();
-                if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
-                {
-                    System.out.println("Création monnaie ");
-                    continue;
 
-                }
                 for (Input in : inputs)
                 {
-                    System.out.println("@Emetteur " + in.getPreviousOutput().getAddress());
-                    System.out.println("Montant Compte emetteur " + in.getPreviousOutput().getValue());
+                    if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
+                    {
+                        System.out.println("Création monnaie ");
+                        System.out.println("ici " + inputs.indexOf(in));
+                        continue;
+                        //in.getPreviousOutput()
+
+
+                    }
+                    else
+                        {
+                        System.out.println("@Emetteur " + in.getPreviousOutput().getAddress());
+                        System.out.println("Montant Compte emetteur SATO " + in.getPreviousOutput().getValueBTC() );
+                          //  System.out.println("Montant Compte emetteur BITCOIN " + in.getPreviousOutput().getValueBTC());
+
+
+                       // System.out.println("ici " + inputs.indexOf(in));
+                    }
+
+
+
+
+
+
 
                 }
-
+                /*
                 for (Output out : outputs)
                 {
 
@@ -53,6 +72,8 @@ public class App
                     System.out.println("Montant compte recepteur " + out.getValue());
 
                 }
+                */
+
 
               //  List<String> r = block.getInputAddress("b8b3afe95a71839fdd79271ba29c4fe9504019fcf8da98e14d42d681db908b5c");
              //  System.out.println("ici " + r.toString());
