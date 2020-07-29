@@ -14,7 +14,8 @@ public class TestAPI {
 
     public static void main(String[] args) throws Exception, APIException {
 
-        //  BlockExplorer BE = new BlockExplorer();
+        /*
+          BlockExplorer BE = new BlockExplorer();
         // BE.getLatestBlock();
 
         //  System.out.println( BE.getLatestBlock().getTimeHuman());
@@ -31,61 +32,84 @@ public class TestAPI {
         // {
         // SB.get(i).getHash();
         //     System.out.println(SB.get(i).getHash());
-
+        */
 
         BlockExplorer blockExplorer = new BlockExplorer();
-        info.blockchain.api.HttpClient.TIMEOUT_MS = 20000000;
-
-        for (int i = 556000; i < 556001; i++)
-        {
-            System.out.println(i);
-            Block block = blockExplorer.getBlock(i);
-            System.out.println("Num block " + i);
-            System.out.println("Hash block " + block.getHash());
-            System.out.println("Nb de transactions " + block.getTransactions().size());
-            System.out.println("Date du block " + block.getTimeHuman());
-
-            List<Transaction> tx = block.getTransactions();
-
-            for (int t = 0; t < block.getTransactions().size(); t++)
-            {
-                List<Input> inputs = tx.get(t).getInputs();
-                List<Output> outputs = tx.get(t).getOutputs();
-
-                for (Input in : inputs)
-                {
-                    if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null) {
-                        System.out.println("Création monnaie ");
-                        System.out.println("ici " + inputs.indexOf(in));
-                        continue;
-                        //in.getPreviousOutput()
 
 
-                    } else {
-                        System.out.println("@Emetteur " + in.getPreviousOutput().getAddress());
-                        System.out.println("Montant Compte emetteur SATO " + in.getPreviousOutput().getValueBTC());
-                        //  System.out.println("Montant Compte emetteur BITCOIN " + in.getPreviousOutput().getValueBTC());
+
+                for (int i = 556453; i < 556455; i++)
+                try {
+
+                    {
+
+                        System.out.println(i);
+                        Block block = blockExplorer.getBlock(i);
+                        System.out.println("Num block " + i);
+                        System.out.println("Hash block " + block.getHash());
+                        System.out.println("Nb de transactions " + block.getTransactions().size());
+                        //   System.out.println("Date du block " + block.getTimeHuman());
+
+                        List<Transaction> tx = block.getTransactions();
+
+                        for (int t = 0; t < block.getTransactions().size(); t++) {
+                            List<Input> inputs = tx.get(t).getInputs();
+                            List<Output> outputs = tx.get(t).getOutputs();
+
+                            for (Input in : inputs) {
+                                if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null) {
+                                    System.out.println("Création monnaie ");
+                                    System.out.println("ici " + inputs.indexOf(in));
+                                    continue;
+                                    //in.getPreviousOutput()
 
 
-                        // System.out.println("ici " + inputs.indexOf(in));
+                                } else {
+                                    System.out.println("@Emetteur " + in.getPreviousOutput().getAddress());
+                                    //   System.out.println("Montant Compte emetteur SATO " + in.getPreviousOutput().getValueBTC());
+                                    //  System.out.println("Montant Compte emetteur BITCOIN " + in.getPreviousOutput().getValueBTC());
+
+
+                                    // System.out.println("ici " + inputs.indexOf(in));
+                                }
+
+
+                            }
+
+
+                        }
+
+
+                        System.out.println("##########################################");
+
+
                     }
-
-
                 }
-
+                catch (Exception e)
+                {
+                    e.printStackTrace();
 
             }
-
-
-            System.out.println("##########################################");
-
-
-        }
 
 
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

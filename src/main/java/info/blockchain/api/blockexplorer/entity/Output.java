@@ -2,8 +2,6 @@ package info.blockchain.api.blockexplorer.entity;
 
 import com.google.gson.JsonObject;
 
-import static info.blockchain.api.Util.SATOSHI_IN_BTC;
-
 /**
  * Represents a transaction output.
  */
@@ -80,15 +78,8 @@ public class Output {
     /**
      * @return Value of the output (in satoshi)
      */
-    public long getValue ()
-    {
+    public long getValue () {
         return value;
-    }
-
-    public double getValueBTC()
-    {
-        double Value_On_BTC =  ((double) value) / SATOSHI_IN_BTC;
-        return Value_On_BTC;
     }
 
     /**
@@ -124,18 +115,5 @@ public class Output {
      */
     public boolean isSpentToAddress () {
         return spentToAddress;
-    }
-
-    @Override
-    public String toString() {
-        return "Output{" +
-                "n=" + n +
-                ", value=" + value +
-                ", address='" + address + '\'' +
-                ", txIndex=" + txIndex +
-                ", script='" + script + '\'' +
-                ", spent=" + spent +
-                ", spentToAddress=" + spentToAddress +
-                '}';
     }
 }

@@ -18,6 +18,4 @@ public interface HttpClientInterface {
 
     String post (String baseURL, String resource, Map<String, String> params) throws APIException, IOException;
 
-
-
 }

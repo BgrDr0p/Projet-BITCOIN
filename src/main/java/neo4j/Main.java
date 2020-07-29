@@ -19,23 +19,23 @@ public class Main {
       //  }
 
 
-         try(GraphManager greeter = new GraphManager( "bolt://localhost:7687", "neo4j", "root" ) )
-         {
+        // try(GraphManager greeter = new GraphManager( "bolt://localhost:7687", "neo4j", "root" ) )
+        // {
             // 1er bloc de 2019 ==> 556453
             // Last bloc : 641355 ==> 2020-07-29 19:03
              // Donc de 556 453 à 641 355
 
-             greeter.insertBloc(1,200);
+        //      greeter.insertBloc(1,200);
 
 
 
 
 
-          }
-         catch (Exception e )
-          {
-             e.printStackTrace();
-         }
+        //   }
+    //  catch (Exception e )
+    //   {
+    //      e.printStackTrace();
+    // }
 
 
 

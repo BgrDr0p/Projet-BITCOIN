@@ -2,10 +2,7 @@ package info.blockchain.api.blockexplorer.entity;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import info.blockchain.api.APIException;
-import info.blockchain.api.blockexplorer.BlockExplorer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,6 @@ public class Block extends SimpleBlock {
     private long receivedTime;
     private String relayedBy;
     private List<Transaction> transactions;
-    private BlockExplorer blockExplorer;
 
     public Block (long height, String hash, long time, boolean mainChain, int version, String previousBlockHash, String merkleRoot, long bits, long fees, long nonce, long size, long index, long receivedTime, String relayedBy, List<Transaction> transactions) {
         super(height, hash, time, mainChain);
@@ -42,8 +38,7 @@ public class Block extends SimpleBlock {
         this.transactions = transactions;
     }
 
-    public Block (JsonObject b)
-    {
+    public Block (JsonObject b) {
         this(b.get("height").getAsLong(), b.get("hash").getAsString(), b.get("time").getAsLong(), b.get("main_chain").getAsBoolean(), b.get("ver").getAsInt(), b.get("prev_block").getAsString(), b.get("mrkl_root").getAsString(), b.get("bits").getAsLong(), b.get("fee").getAsLong(), b.get("nonce").getAsLong(), b.get("size").getAsLong(), b.get("block_index").getAsLong(), b.has("received_time") ? b.get("received_time").getAsLong() : b.get("time").getAsLong(), b.has("relayed_by") ? b.get("relayed_by").getAsString() : null, null);
 
         transactions = new ArrayList<Transaction>();
@@ -176,25 +171,4 @@ public class Block extends SimpleBlock {
     public List<Transaction> getTransactions () {
         return transactions;
     }
-
-
-    public List<String> getInputAddress(String HashTransaction) throws APIException, IOException
-    {
-        Transaction tx = blockExplorer.getTransaction(HashTransaction);
-        List<String> res = new ArrayList<String>();
-        for ( Input i : tx.getInputs())
-        {
-
-            res.add(i.getPreviousOutput().getAddress());
-            //System.out.println(i.getPreviousOutput().getValue());
-        }
-
-        return res ;
-
-    }
-
-
-
-
-
 }

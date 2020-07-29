@@ -26,11 +26,9 @@ public class BlockExplorer {
     /**
      * @param apiCode Blockchain.info API code (optional, nullable)
      */
-   public BlockExplorer (String apiCode) {
-       this.apiCode = "ca1e48aa-8212-42ca-a671-1881033132f6";
-   }
-
-
+    public BlockExplorer (String apiCode) {
+        this.apiCode = apiCode;
+    }
 
     /**
      * Gets a single transaction based on a transaction index.
@@ -66,8 +64,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      * @deprecated As of 1.1.5, will be removed in future releases
      */
-
-
+    @Deprecated
     public Block getBlock (long blockIndex) throws APIException, IOException {
         return getBlock(String.valueOf(blockIndex));
     }

@@ -3,7 +3,6 @@ package info.blockchain.api.blockexplorer.entity;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,16 +120,6 @@ public class Transaction {
         return time;
     }
 
-    public String getTimeHuman()
-    {
-
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy  HH:mm:ss");
-        String date = sdf.format(time*1000L);
-
-        return date;
-    }
-
     /**
      * @return Locktime of the transaction
      */
@@ -186,23 +175,4 @@ public class Transaction {
     public List<Output> getOutputs () {
         return outputs;
     }
-
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "doubleSpend=" + doubleSpend +
-                ", blockHeight=" + blockHeight +
-                ", time=" + time +
-                ", lockTime=" + lockTime +
-                ", relayedBy='" + relayedBy + '\'' +
-                ", hash='" + hash + '\'' +
-                ", index=" + index +
-                ", version=" + version +
-                ", size=" + size +
-                ", inputs=" + inputs +
-                ", outputs=" + outputs +
-                '}';
-    }
-
 }
-

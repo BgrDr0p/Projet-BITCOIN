@@ -2,10 +2,6 @@ package info.blockchain.api.blockexplorer.entity;
 
 import com.google.gson.JsonObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Simple representation of a block
  */
@@ -78,16 +74,6 @@ public class SimpleBlock {
      */
     public long getTime () {
         return time;
-    }
-
-    public String getTimeHuman()
-    {
-
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy  HH:mm:ss");
-        String date = sdf.format(time*1000L);
-
-        return date;
     }
 
     /**

@@ -7,8 +7,6 @@ import com.google.gson.JsonObject;
  * coinbase input.
  */
 public class Input {
-
-
     private Output previousOutput;
     private long sequence;
     private String scriptSignature;
@@ -81,14 +79,5 @@ public class Input {
         result = 31 * result + (int) (sequence ^ (sequence >>> 32));
         result = 31 * result + scriptSignature.hashCode();
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Input{" +
-                "previousOutput=" + previousOutput +
-                ", sequence=" + sequence +
-                ", scriptSignature='" + scriptSignature + '\'' +
-                '}';
     }
 }
