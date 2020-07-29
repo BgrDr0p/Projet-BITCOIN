@@ -73,22 +73,35 @@ public class GraphManager implements AutoCloseable
                             else
                             {
                                 txNEO4J.run("MERGE (tx:tx { txid :'"+ txBloc.get(t).getHash() + "'}) \n " +
-                                        "MERGE(value:value {value :'" + in.getPreviousOutput().getValueBTC()+ "' }) \n" +
-                                        "MERGE (value) -[:in {in :'"+ inputs.indexOf(in) + "' }]->(tx) \n" +
-                                        "MERGE (address:address {addressid :'" + in.getPreviousOutput().getAddress() + "'}) \n" +
-                                       // "MERGE (address) -[:unlocked_by {unlocked_by :'" + in.getPreviousOutput().getValueBTC() +"' }] ->(value)");
-                                        "MERGE (value) -[:unlocked_by {unlocked_by :'" + in.getPreviousOutput().getAddress() + "' }] ->(address)");
+                                        "CREATE(value_in:value_in {value :'" + in.getPreviousOutput().getValueBTC()+ "' }) \n" +
+                                        "MERGE (value_in) -[:in {in :'"+ inputs.indexOf(in) + "' }]->(tx) \n" +
+                                        "MERGE (address_in:address_in {addressid_in :'" + in.getPreviousOutput().getAddress() + "'}) \n" +
+
+                                        "MERGE (value_in) -[:unlocked_by {unlocked_by :'" + in.getPreviousOutput().getAddress() + "' }] ->(address_in)");
                             }
+                        }
+
+                        for(Output out : outputs)
+                        {
+
+                            txNEO4J.run("MERGE (tx:tx { txid :'"+ txBloc.get(t).getHash() + "'}) \n " +
+                                    "CREATE (value_out:value_out {value :'" + out.getValueBTC()+ "' }) \n" +
+                                    "MERGE (tx) -[:out {out :'"+ outputs.indexOf(out) + "' }]->(value_out) \n" +
+                                    "MERGE  (address_out:address_out {addressid_out :'" + out.getAddress() + "'}) \n" +
+                                    "MERGE (value_out) -[:locked_by {locked_by :'" + out.getValueBTC() + "' }] ->(address_out)");
+
 
 
                         }
 
 
-
                     }
 
+
+
                   txNEO4J.commit();
-                    System.out.println(driver.session().toString());
+                    
+
 
 
 

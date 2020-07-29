@@ -24,7 +24,7 @@ public class Main {
          {
 
        //   greeter.addEmployAndMakeFriends();
-             greeter.insertBloc(357950,357951);
+             greeter.insertBloc(78900,78901);
           }
          catch (Exception e )
           {
