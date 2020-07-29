@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 public class HttpClient implements HttpClientInterface {
     private static final String BASE_URL = "https://blockchain.info/";
 
-    public volatile static int TIMEOUT_MS = 10000;
+    public volatile static int TIMEOUT_MS = 10000; // avant ==> 10000
 
     private static HttpClientInterface instance;
 
