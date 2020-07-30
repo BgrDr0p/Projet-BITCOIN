@@ -20,7 +20,7 @@ public class BlockExplorer {
     private final String apiCode;
 
     public BlockExplorer () {
-        this(null);
+        this("ca1e48aa-8212-42ca-a671-1881033132f6");
     }
 
     /**

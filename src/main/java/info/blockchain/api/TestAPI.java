@@ -87,9 +87,13 @@ public class TestAPI {
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace();
+                    System.out.println("BLOC NON INSERES num " + i );
 
             }
+                finally {
+                   continue;
+                }
+
 
 
     }

@@ -2,6 +2,8 @@ package info.blockchain.api.blockexplorer.entity;
 
 import com.google.gson.JsonObject;
 
+import static info.blockchain.api.Util.SATOSHI_IN_BTC;
+
 /**
  * Represents a transaction output.
  */
@@ -109,6 +111,13 @@ public class Output {
     public boolean isSpent () {
         return spent;
     }
+
+    public double getValueBTC()
+    {
+        double Value_On_BTC =  ((double) value) / SATOSHI_IN_BTC;
+        return Value_On_BTC;
+    }
+
 
     /**
      * @return Whether the output pays to an address.
