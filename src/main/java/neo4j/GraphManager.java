@@ -58,29 +58,36 @@ public class GraphManager implements AutoCloseable
 
                     System.out.println("Les infos du bloc " + j + "==> OK");
                     List<info.blockchain.api.blockexplorer.entity.Transaction> txBloc = block.getTransactions();
-                    for (int t = 0; t < block.getTransactions().size(); t++) {
+                    for (int t = 0; t < block.getTransactions().size(); t++)
+                     {
                         List<Input> inputs = txBloc.get(t).getInputs();
                         List<Output> outputs = txBloc.get(t).getOutputs();
-                        try (Transaction txNEO4J = session2.beginTransaction()) {
+                        try (Transaction txNEO4J = session2.beginTransaction())
+                        {
                             txNEO4J.run("MATCH (block :block {hash:'" + block.getHash() + "'})\n" +
                                     "MERGE (tx:tx {txid:'" + txBloc.get(t).getHash() + "'})\n" +
                                     "MERGE (tx)-[:inc {i:'" + t + "'}]->(block)");
                             txNEO4J.commit();
                         }
 
-                        for (Input in : inputs) {
+                        for (Input in : inputs)
+                        {
 
-                            if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null) {
+                            if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
+                            {
                                 String node_in = "COINBASE";
-                                try (Transaction txNEO4J = session3.beginTransaction()) {
+                                try (Transaction txNEO4J = session3.beginTransaction())
+                                {
                                     txNEO4J.run("MERGE (tx:tx { txid :'" + txBloc.get(t).getHash() + "'}) \n " +
                                             "CREATE (value_in:value_in { value :'" + node_in + "' }) \n" +
                                             "MERGE (value_in) -[:value_in {in :'" + inputs.indexOf(in) + "' }]->(tx)");
                                     txNEO4J.commit();
                                 }
                                 continue;
-                            } else {
-                                try (Transaction txNEO4J = session4.beginTransaction()) {
+                            } else
+                                {
+                                try (Transaction txNEO4J = session4.beginTransaction())
+                                {
 
                                     txNEO4J.run("MERGE (tx:tx { txid :'" + txBloc.get(t).getHash() + "'}) \n " +
                                             "CREATE(value_in:value_in {value :'" + in.getPreviousOutput().getValueBTC() + "' }) \n" +
@@ -93,11 +100,14 @@ public class GraphManager implements AutoCloseable
                             }
                         }
 
-                        for (Output out : outputs) {
+                        for (Output out : outputs)
+                        {
 
-                            if (outputs.isEmpty() || outputs.get(0).getAddress() == null) {
+                            if (outputs.isEmpty() || outputs.get(0).getAddress() == null)
+                            {
                                 String node_out = "NOADDRESS";
-                                try (Transaction txNEO4J = session5.beginTransaction()) {
+                                try (Transaction txNEO4J = session5.beginTransaction())
+                                {
                                     txNEO4J.run("MERGE (tx:tx { txid :'" + txBloc.get(t).getHash() + "'}) \n " +
                                             "MERGE(value_out:value_out { value :'" + node_out + "' }) \n" +
                                             "MERGE (tx) -[:out {out :'" + outputs.indexOf(out) + "' }]->(value_out)");
@@ -107,14 +117,14 @@ public class GraphManager implements AutoCloseable
                                 continue;
 
                             } else {
-                                try (Transaction txNEO4J = session6.beginTransaction()) {
+                                try (Transaction txNEO4J = session6.beginTransaction())
+                                {
                                     txNEO4J.run("MERGE (tx:tx { txid :'" + txBloc.get(t).getHash() + "'}) \n " +
                                             "CREATE (value_out:value_out {value :'" + out.getValueBTC() + "' }) \n" +
                                             "MERGE (tx) -[:out {out :'" + outputs.indexOf(out) + "' }]->(value_out) \n" +
                                             "MERGE  (address_out:address_out {addressid_out :'" + out.getAddress() + "'}) \n" +
                                             "MERGE (value_out) -[:locked_by {locked_by :'" + out.getValueBTC() + "' }] ->(address_out)");
                                     txNEO4J.commit();
-
                                 }
 
 
@@ -135,11 +145,12 @@ public class GraphManager implements AutoCloseable
 
                 }
             }
-        catch (Exception e )
-        {
-            System.out.println("Bloc num : " + j + "non inserés");
-        }
-        finally {
+            catch (Exception e )
+            {
+                System.out.println("Bloc num : " + j + "non inserés");
+            }
+            finally
+            {
                 continue;
             }
     }
@@ -148,10 +159,6 @@ public class GraphManager implements AutoCloseable
 
 
 
-    }
-
-
-
-
+}
 
 

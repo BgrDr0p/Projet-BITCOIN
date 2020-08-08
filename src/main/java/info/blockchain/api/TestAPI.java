@@ -2,6 +2,7 @@ package info.blockchain.api;
 
 import info.blockchain.api.blockexplorer.BlockExplorer;
 import info.blockchain.api.blockexplorer.entity.*;
+import org.apache.commons.lang3.time.StopWatch;
 
 
 import java.util.ArrayList;
@@ -14,77 +15,88 @@ public class TestAPI {
 
     public static void main(String[] args) throws Exception, APIException {
 
-        /*
-          BlockExplorer BE = new BlockExplorer();
-        // BE.getLatestBlock();
 
-        //  System.out.println( BE.getLatestBlock().getTimeHuman());
-        // Last bloc : 641355 ==> 2020-07-29 19:03
-
-        // timespand du 01/01/2019 ==> 1546300800
-        //System.out.println(BE.getBlocks("1546300800" ));
-
-
-        //  List<SimpleBlock> SB =  BE.getBlocks(1546301460);
-        //  System.out.println(SB.toString());
-
-        // for(int i = 0;i < SB.size(); i++)
-        // {
-        // SB.get(i).getHash();
-        //     System.out.println(SB.get(i).getHash());
-        */
 
         BlockExplorer blockExplorer = new BlockExplorer();
+        StopWatch stopwatch = new StopWatch();
 
 
 
-                for (int i = 556453; i < 556455; i++)
-                try {
+                for (int i = 556526; i < 556528; i++)
 
-                    {
+                    try {
 
-                        System.out.println(i);
-                        Block block = blockExplorer.getBlock(i);
-                        System.out.println("Num block " + i);
-                        System.out.println("Hash block " + block.getHash());
-                        System.out.println("Nb de transactions " + block.getTransactions().size());
-                        //   System.out.println("Date du block " + block.getTimeHuman());
+                        {
+                            stopwatch.start();
 
-                        List<Transaction> tx = block.getTransactions();
+                            System.out.println(i);
+                            Block block = blockExplorer.getBlock(i);
+                            System.out.println("Num block " + i);
+                            System.out.println("Hash block " + block.getHash());
+                            System.out.println("Nb de transactions " + block.getTransactions().size());
+                            //   System.out.println("Date du block " + block.getTimeHuman());
 
-                        for (int t = 0; t < block.getTransactions().size(); t++) {
-                            List<Input> inputs = tx.get(t).getInputs();
-                            List<Output> outputs = tx.get(t).getOutputs();
+                            List<Transaction> tx = block.getTransactions();
+                            for (int t = 0; t < block.getTransactions().size(); t++) {
+                                List<Input> inputs = tx.get(t).getInputs();
+                                List<Output> outputs = tx.get(t).getOutputs();
 
-                            for (Input in : inputs) {
-                                if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null) {
-                                    System.out.println("Création monnaie ");
-                                    System.out.println("ici " + inputs.indexOf(in));
-                                    continue;
-                                    //in.getPreviousOutput()
-
-
-                                } else {
-                                    System.out.println("@Emetteur " + in.getPreviousOutput().getAddress());
-                                    //   System.out.println("Montant Compte emetteur SATO " + in.getPreviousOutput().getValueBTC());
-                                    //  System.out.println("Montant Compte emetteur BITCOIN " + in.getPreviousOutput().getValueBTC());
+                                for (Input in : inputs) {
+                                    if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
+                                    {
+                                        System.out.println("Création monnaie ");
+                                        System.out.println("ici " + inputs.indexOf(in));
+                                        continue;
+                                        //in.getPreviousOutput()
 
 
-                                    // System.out.println("ici " + inputs.indexOf(in));
+                                    }
+                                    else {
+
+                                        System.out.println("@Emetteur " + in.getPreviousOutput().getAddress());
+                                        System.out.println("Montant Compte emetteur BITCOIN " + in.getPreviousOutput().getValueBTC());
+
+                                    }
+
+
+                                }
+                                for (Output out : outputs)
+                                {
+                                    if (outputs.isEmpty() || outputs.get(0).getAddress() == null)
+                                    {
+                                        System.out.println("Création monnaie ");
+                                        System.out.println("ici " + inputs.indexOf(out));
+
+                                        continue;
+
+
+                                    } else {
+                                        System.out.println("@Emetteur " + out.getAddress());
+
+                                        System.out.println("Montant Compte emetteur BITCOIN " + out.getValueBTC());
+
+                                        //System.out.println("ici " + inputs.indexOf(in));
+                                        //System.out.println("ici " + inputs.indexOf(in));
+                                    }
+
                                 }
 
 
                             }
 
 
+                            System.out.println("##########################################");
+
+
+
+
+
                         }
-
-
-                        System.out.println("##########################################");
-
-
+                        stopwatch.stop();
+                        long timeTaken = stopwatch.getTime();
+                        System.out.println("ca a pris " + timeTaken);
                     }
-                }
+
                 catch (Exception e)
                 {
                     System.out.println("BLOC NON INSERES num " + i );
