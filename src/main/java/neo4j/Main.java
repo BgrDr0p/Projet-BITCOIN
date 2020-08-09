@@ -13,6 +13,7 @@ public class Main {
 
         try(GraphManager greeter = new GraphManager( "bolt://localhost:7687", "neo4j", "root" ) )
          {
+
               /*
           BlockExplorer BE = new BlockExplorer();
         // BE.getLatestBlock();
@@ -43,8 +44,9 @@ public class Main {
              // Donc de 556 453 à 641 355
 
              // recommenercer a partir de 556526
-            greeter.insertBloc(556526,556528);
-
+            greeter.insertTransaction(265851,265852);
+            greeter.insertInputs(265851,265852);
+            greeter.insertOutputs(265851,265852);
 
          }
       catch (Exception e )

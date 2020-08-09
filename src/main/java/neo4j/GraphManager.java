@@ -8,157 +8,273 @@ import info.blockchain.api.blockexplorer.entity.Output;
 import org.neo4j.driver.*;
 
 import java.io.IOException;
+import java.net.PasswordAuthentication;
+import java.sql.PreparedStatement;
 import java.util.List;
 
-public class GraphManager implements AutoCloseable
-{
+public class GraphManager implements AutoCloseable {
 
 
     private final Driver driver;
 
-    public GraphManager( String uri, String user, String password )
-    {
-        driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
+    public GraphManager(String uri, String user, String password) {
+        driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
+
     }
 
     @Override
-    public void close() throws Exception
-    {
+    public void close() throws Exception {
         driver.close();
 
     }
 
 
-    public void insertBloc(int debut, int fin) throws APIException, IOException {
+    public void insertTransaction(int debutBloc, int finBloc) throws APIException, IOException {
 
 
         Session session1 = driver.session();
-        Session session2 = driver.session();
-        Session session3 = driver.session();
-        Session session4 = driver.session();
-        Session session5 = driver.session();
-        Session session6 = driver.session();
+
         BlockExplorer blockExplorer = new BlockExplorer();
-
-        for (int j = debut; j < fin; j++)
-            try {
+        String QueryTransaction = "MERGE (tx:tx {txid:$txid})";
+        try {
+            for (int j = debutBloc; j < finBloc; j++)
+            {
+                System.out.println("Passage au block " + j);
+                try
                 {
+
                     Block block = blockExplorer.getBlock(j);
-
-                    try (Transaction txNEO4J = session1.beginTransaction()) {
-                        txNEO4J.run("MERGE (block:block {hash:'" + block.getHash() + "'})\n" +
-                                "SET block.prevblock='" + block.getPreviousBlockHash() + "', \n" +
-                                "block.time='" + block.getTimeHuman() + "', \n" +
-                                "block.num='" + j + "', \n" +
-                                "block.txcount='" + block.getTransactions().size() + "' \n" +
-                                "MERGE (prevblock:block { hash:'" + block.getPreviousBlockHash() + "'}) MERGE (block)-[:chain]->(prevblock)");
-                        txNEO4J.commit();
-
-                    }
-
-                    System.out.println("Les infos du bloc " + j + "==> OK");
-                    List<info.blockchain.api.blockexplorer.entity.Transaction> txBloc = block.getTransactions();
-                    for (int t = 0; t < block.getTransactions().size(); t++)
-                     {
-                        List<Input> inputs = txBloc.get(t).getInputs();
-                        List<Output> outputs = txBloc.get(t).getOutputs();
-                        try (Transaction txNEO4J = session2.beginTransaction())
+                    List<info.blockchain.api.blockexplorer.entity.Transaction> tx = block.getTransactions();
+                    for(int t = 0; t < tx.size()  ; t++)
+                    {
+                        try (Transaction txNEO4J = session1.beginTransaction())
                         {
-                            txNEO4J.run("MATCH (block :block {hash:'" + block.getHash() + "'})\n" +
-                                    "MERGE (tx:tx {txid:'" + txBloc.get(t).getHash() + "'})\n" +
-                                    "MERGE (tx)-[:inc {i:'" + t + "'}]->(block)");
+
+                            txNEO4J.run(QueryTransaction, Values.parameters("txid", tx.get(t).getHash()));
+
                             txNEO4J.commit();
-                        }
-
-                        for (Input in : inputs)
-                        {
-
-                            if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
-                            {
-                                String node_in = "COINBASE";
-                                try (Transaction txNEO4J = session3.beginTransaction())
-                                {
-                                    txNEO4J.run("MERGE (tx:tx { txid :'" + txBloc.get(t).getHash() + "'}) \n " +
-                                            "CREATE (value_in:value_in { value :'" + node_in + "' }) \n" +
-                                            "MERGE (value_in) -[:value_in {in :'" + inputs.indexOf(in) + "' }]->(tx)");
-                                    txNEO4J.commit();
-                                }
-                                continue;
-                            } else
-                                {
-                                try (Transaction txNEO4J = session4.beginTransaction())
-                                {
-
-                                    txNEO4J.run("MERGE (tx:tx { txid :'" + txBloc.get(t).getHash() + "'}) \n " +
-                                            "CREATE(value_in:value_in {value :'" + in.getPreviousOutput().getValueBTC() + "' }) \n" +
-                                            "MERGE (value_in) -[:in {in :'" + inputs.indexOf(in) + "' }]->(tx) \n" +
-                                            "MERGE (address_in:address_in {addressid_in :'" + in.getPreviousOutput().getAddress() + "'}) \n" +
-
-                                            "MERGE (value_in) -[:unlocked_by {unlocked_by :'" + in.getPreviousOutput().getAddress() + "' }] ->(address_in)");
-                                    txNEO4J.commit();
-                                }
-                            }
-                        }
-
-                        for (Output out : outputs)
-                        {
-
-                            if (outputs.isEmpty() || outputs.get(0).getAddress() == null)
-                            {
-                                String node_out = "NOADDRESS";
-                                try (Transaction txNEO4J = session5.beginTransaction())
-                                {
-                                    txNEO4J.run("MERGE (tx:tx { txid :'" + txBloc.get(t).getHash() + "'}) \n " +
-                                            "MERGE(value_out:value_out { value :'" + node_out + "' }) \n" +
-                                            "MERGE (tx) -[:out {out :'" + outputs.indexOf(out) + "' }]->(value_out)");
-                                    txNEO4J.commit();
-                                }
-
-                                continue;
-
-                            } else {
-                                try (Transaction txNEO4J = session6.beginTransaction())
-                                {
-                                    txNEO4J.run("MERGE (tx:tx { txid :'" + txBloc.get(t).getHash() + "'}) \n " +
-                                            "CREATE (value_out:value_out {value :'" + out.getValueBTC() + "' }) \n" +
-                                            "MERGE (tx) -[:out {out :'" + outputs.indexOf(out) + "' }]->(value_out) \n" +
-                                            "MERGE  (address_out:address_out {addressid_out :'" + out.getAddress() + "'}) \n" +
-                                            "MERGE (value_out) -[:locked_by {locked_by :'" + out.getValueBTC() + "' }] ->(address_out)");
-                                    txNEO4J.commit();
-                                }
-
-
-                            }
-
 
                         }
-
-
-                        System.out.println("Inputs et outputs num :  " + t + " sur " + block.getTransactions().size() + " ==> OK ");
-
-
+                        System.out.println("Transaction " + t + " OK ! ");
                     }
 
-
-                    System.out.println("le bloc num : " + j + " a été entièrement inséré !");
 
 
                 }
+
+                catch (Exception e )
+                {
+                    e.printStackTrace();
+                }
+
             }
-            catch (Exception e )
+            session1.close();
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("Bloc non disponible");
+        }
+
+
+
+
+
+    }
+
+
+
+    public void insertInputs(int debutBloc, int finBloc) throws APIException, IOException
+    {
+        try
+        {
+            Session session2 = driver.session();
+            Session session3 = driver.session();
+            BlockExplorer blockExplorer = new BlockExplorer();
+            String node_in = "COINBASE";
+            String QueryInputCoinBase = "MERGE (tx:tx {txid :$txid }) \n " +
+                    "CREATE (value_in:value_in { value : $node_in }) \n" +
+                    "MERGE (value_in) -[:value_in {in :$in }]->(tx)" ;
+            String QueryInputReal = "MERGE (tx:tx { txid :$txid }) \n " +
+                    "CREATE(value_in:value_in {value :$value }) \n" +
+                    "MERGE (value_in) -[:in {in :$in}]->(tx) \n" +
+                    "MERGE (address_in:address_in {addressid_in : $addresseid_in}) \n" +
+                    "MERGE (value_in) -[:unlocked_by {unlocked_by : $unlocked_by }] ->(address_in)";
+
+            for (int j = debutBloc; j < finBloc; j++)
             {
-                System.out.println("Bloc num : " + j + "non inserés");
+                System.out.println("Passage au block " + j);
+                try
+                {
+
+                    Block block = blockExplorer.getBlock(j);
+                    List<info.blockchain.api.blockexplorer.entity.Transaction> tx = block.getTransactions();
+                    for(int t = 0; t < tx.size() ; t++)
+                    {
+
+                        List<Input> inputs = tx.get(t).getInputs();
+
+
+
+                        for(Input in  : inputs)
+                        {
+                            if (inputs.isEmpty() || inputs.get(0).getPreviousOutput() == null)
+                            {
+                                try (Transaction txNEO4JInputCOINBASE = session2.beginTransaction())
+                                {
+                                    txNEO4JInputCOINBASE.run(QueryInputCoinBase, Values.parameters("txid", tx.get(t).getHash(), "node_in", node_in, "in", inputs.indexOf(in)));
+                                    txNEO4JInputCOINBASE.commit();
+                                    continue;
+                                }
+
+                            }
+                            else
+                            {
+                                try (Transaction txNEO4JInput = session3.beginTransaction())
+                                {
+                                    txNEO4JInput.run( QueryInputReal, Values.parameters("txid", tx.get(t).getHash(), "value", in.getPreviousOutput().getValueBTC(),
+                                            "in", inputs.indexOf(in), "addresseid_in", in.getPreviousOutput().getAddress(), "unlocked_by", in.getPreviousOutput().getAddress()));
+
+                                    txNEO4JInput.commit();
+                                }
+
+
+
+                            }
+                            System.out.println("insertion inputs num : " + inputs.indexOf(in) + " sur " + inputs.size());
+                        }
+
+                    }
+
+
+
+
+                }
+
+                catch (Exception e )
+                {
+                    e.printStackTrace();
+                }
+
+
             }
-            finally
+            session2.close();
+            session3.close();
+        }
+        catch (Exception e )
+        {
+            System.out.println("Bloc non disponible");
+        }
+
+
+
+    }
+
+
+    public void insertOutputs(int debutBloc, int finBloc) throws APIException, IOException
+    {
+        Session session3 = driver.session();
+        Session session4 = driver.session();
+        String node_out = "NOADDRESS";
+        String QueryOutpoutNoAddress = "MERGE (tx:tx { txid :$txid}) \n " +
+                        "MERGE(value_out:value_out { value :$value }) \n" +
+                        "MERGE (tx) -[:out {out : $out }]->(value_out)";
+        String QueryOutpout = "MERGE (tx:tx { txid :$txid }) \n " +
+                "CREATE (value_out:value_out {value : $value }) \n" +
+                "MERGE (tx) -[:out {out : $out }]->(value_out) \n" +
+                "MERGE  (address_out:address_out {addressid_out : $addressid_out}) \n" +
+                "MERGE (value_out) -[:locked_by {locked_by : $locked_by }] ->(address_out)";
+
+        BlockExplorer blockExplorer = new BlockExplorer();
+
+        try
+        {
+
+            for (int j = debutBloc; j < finBloc; j++)
             {
-                continue;
+                System.out.println("Passage au block " + j);
+                try
+                {
+
+                    Block block = blockExplorer.getBlock(j);
+                    List<info.blockchain.api.blockexplorer.entity.Transaction> tx = block.getTransactions();
+                    for(int t = 0; t < tx.size() ; t++)
+                    {
+
+                        List<Output> outputs = tx.get(t).getOutputs();
+
+
+
+                        for(Output out  : outputs)
+                        {
+                            if (outputs.isEmpty() || outputs.get(0).getAddress()  == null)
+                            {
+                                try (Transaction txNEO4JOutputNoAddress = session3.beginTransaction())
+                                {
+                                    txNEO4JOutputNoAddress.run(QueryOutpoutNoAddress, Values.parameters("txid", tx.get(t).getHash(),
+                                            "value", node_out, "out", outputs.indexOf(out)));
+                                    txNEO4JOutputNoAddress.commit();
+                                    continue;
+                                }
+
+                            }
+                            else
+                            {
+                                try (Transaction txNEO4JOutput = session4.beginTransaction())
+                                {
+                                    txNEO4JOutput.run(QueryOutpout, Values.parameters("txid", tx.get(t).getHash(), "value", out.getValueBTC(),
+                                            "out", outputs.indexOf(out), "addressid_out", out.getAddress(), "locked_by", out.getValueBTC()  )) ;
+                                    txNEO4JOutput.commit();
+                                }
+
+
+
+                            }
+                            System.out.println("insertion outputs num : " + outputs.indexOf(out) + " sur " + outputs.size());
+                        }
+
+                    }
+
+
+
+
+                }
+
+                catch (Exception e )
+                {
+                    e.printStackTrace();
+                }
+
+
             }
+            session3.close();
+            session4.close();
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("Bloc non disponible");
+        }
+
+
+
+
     }
 
 
 
 
 
-}
+
+
+
+
+
+    }
+
+
+
+
+
 
 
