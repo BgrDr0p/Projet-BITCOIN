@@ -12,9 +12,9 @@ public class FindBlockWithTimestamp {
 
 
         BlockExplorer blockExplorer = new BlockExplorer();
-        StopWatch stopwatch = new StopWatch();
+        // StopWatch stopwatch = new StopWatch();
 
-        List<SimpleBlock> SB = blockExplorer.getBlocks(1548975600);
+        List<SimpleBlock> SB = blockExplorer.getBlocks(1578006000);
 
         for (int i = 0; i < SB.size(); i++) {
             SB.get(i).getHash();

@@ -141,7 +141,7 @@ public class GraphManager implements AutoCloseable {
 
 
                             }
-                            System.out.println("insertion inputs num : " + inputs.indexOf(in) + " sur " + inputs.size());
+                            System.out.println("insertion inputs num : " + inputs.indexOf(in) );
                         }
 
                     }
@@ -230,7 +230,7 @@ public class GraphManager implements AutoCloseable {
 
 
                             }
-                            System.out.println("insertion outputs num : " + outputs.indexOf(out) + " sur " + outputs.size());
+                            System.out.println("insertion outputs num : " + outputs.indexOf(out));
                         }
 
                     }
