@@ -7,9 +7,9 @@ public class TestJsonFiles {
 
 
         BuildJsonFiles BJF = new BuildJsonFiles();
+      //  BJF.BlocJSON(0,10);
 
-        BJF.CreateJsonBlocs(0,10);
-
+        BJF.TransactionJSon(0,10);
     }
 
 

@@ -1,95 +1,112 @@
 package info.blockchain.api;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import info.blockchain.api.blockexplorer.BlockExplorer;
+
 import info.blockchain.api.blockexplorer.entity.Block;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import info.blockchain.api.blockexplorer.entity.Transaction;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BuildJsonFiles {
 
     BlockExplorer blockExplorer = new BlockExplorer();
 
-    public void CreateBlocs(int debutbloc, int finbloc) throws Exception, APIException
 
+
+
+
+
+    public void BlocJSON(int debutbloc, int finbloc) throws Exception
+    {
+        JSONObject rootObject = new JSONObject();
+        JSONArray Bloc = new JSONArray();
+        for (int i = debutbloc; i < finbloc ; i++)
+        {
+            Block block = blockExplorer.getBlock(i);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("Bloc_num", i);
+            jsonObject.put("Bloc_hash", block.getHash());
+            jsonObject.put("bloc_prevhash", block.getPreviousBlockHash());
+            jsonObject.put("bloc_time", block.getTimeHuman());
+            jsonObject.put("bloc_txsize", block.getTransactions().size());
+            Bloc.add(jsonObject);
+
+            rootObject.put("Blocs", Bloc);
+
+            try (FileWriter file = new FileWriter("D:\\Bureau\\Test\\blocs-" + debutbloc + "-"+ finbloc +"-infos"))
+            {
+
+                // file.write(arr.toJSONString());
+                file.write(rootObject.toJSONString());
+                System.out.println("Bloc " + i + " OK ");
+                //  System.out.println("tout les blocs sont inscrit sur le fichier JSON");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+
+
+    }
+
+
+    public void TransactionJSon(int debutbloc, int finbloc) throws Exception
     {
 
 
-        JSONArray arr = new JSONArray();
-        HashMap<String, JSONObject> map = new HashMap<String, JSONObject>();
-        for(int i = debutbloc ; i < finbloc ; i++)
+        JSONObject rootObject = new JSONObject();
+        JSONArray Bloc = new JSONArray();
+        JsonArray Transaction = new JsonArray();
+        JsonArray Input = new JsonArray();
+        JsonArray Output = new JsonArray();
+        for (int i = debutbloc; i < finbloc ; i++)
         {
             Block block = blockExplorer.getBlock(i);
 
-            JSONObject json=new JSONObject();
-            json.put("Bloc_num",i);
-            json.put("Bloc_hash", block.getHash());
-            json.put("Bloc_prevhash", block.getPreviousBlockHash());
-            json.put("bloc_time", block.getTimeHuman());
-            json.put("bloc_txnb", block.getTransactions().size());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("Bloc_num", i);
 
-            map.put("Bloc" + i, json);
-            arr.put(map.get("Bloc" + i));
-            System.out.println("infos du bloc " + arr.toString() + "ok");
+            Bloc.add(jsonObject);
+
+            rootObject.put("Transactions", Bloc);
+
+            
+
+            List<Transaction> tx = block.getTransactions();
+
+
+
+
+
+
+
+
+            try (FileWriter file = new FileWriter("D:\\Bureau\\Test\\blocs-" + debutbloc + "-"+ finbloc +"-transactions"))
+            {
+
+                // file.write(arr.toJSONString());
+                file.write(rootObject.toJSONString());
+                System.out.println("Transactions " + i + " OK ");
+                //  System.out.println("tout les blocs sont inscrit sur le fichier JSON");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
-
-
-        try (FileWriter file = new FileWriter("D:\\Bureau\\Test\\blocs-" + debutbloc + "-"+ finbloc +"-infos"))
-        {
-
-            // file.write(arr.toJSONString());
-            file.write(arr.toString());
-            file.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-
-    public void CreateTransaction(int debutbloc, int finbloc) throws Exception, APIException
-    {
-
-        JSONArray arr = new JSONArray();
-        HashMap<String, JSONObject> map = new HashMap<String, JSONObject>();
-        for(int i = debutbloc ; i < finbloc ; i++)
-        {
-            Block block = blockExplorer.getBlock(i);
-
-            JSONObject json=new JSONObject();
-            json.put("Bloc_num",i);
-
-            map.put("Bloc" + i, json);
-            arr.put(map.get("Bloc" + i));
-        }
-        System.out.println("The json string is " + arr.toString());
-
-        try (FileWriter file = new FileWriter("D:\\Bureau\\Test\\blocs-" + debutbloc + "-"+ finbloc +"-infos"))
-        {
-
-            // file.write(arr.toJSONString());
-            file.write(arr.toString());
-            file.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-
-
-
-
-
 
 
     }
@@ -99,53 +116,7 @@ public class BuildJsonFiles {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 
