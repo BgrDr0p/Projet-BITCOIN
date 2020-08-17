@@ -23,6 +23,7 @@ public class ApiToNeo4J implements Runnable
         new Thread(() -> {
             try
             {
+
                 stopwatch.start();
                 greeter.insertOutputs(610680,610681);
                 stopwatch.stop();

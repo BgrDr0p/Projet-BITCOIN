@@ -23,6 +23,8 @@ import java.util.concurrent.ExecutionException;
 public class BuildJsonFiles {
 
     BlockExplorer blockExplorer = new BlockExplorer();
+    String path = System.getProperty("user.dir");
+
 
 
     public void BlocJSON(int debutbloc, int finbloc) throws Exception {
@@ -41,11 +43,11 @@ public class BuildJsonFiles {
 
                 rootObject.put("Blocs", Bloc);
 
-                try (FileWriter file = new FileWriter("blocs-" + debutbloc + "-" + finbloc + "-infos")) {
+                try (FileWriter file = new FileWriter(path + "\\DataProgramBlocs\\ " +  "blocs-" + debutbloc + "-" + finbloc + "-infos")) {
 
                     // file.write(arr.toJSONString());
                     file.write(rootObject.toJSONString());
-                    System.out.println("Bloc " + i + " OK ");
+                  //  System.out.println("Bloc " + i + " OK ");
                     //  System.out.println("tout les blocs sont inscrit sur le fichier JSON");
 
                 } catch (IOException e) {
@@ -124,7 +126,7 @@ public class BuildJsonFiles {
                     }
 
 
-                    try (FileWriter file = new FileWriter("D:\\Bureau\\Test\\blocs-" + debutbloc + "-" + finbloc + "-transactions")) {
+                    try (FileWriter file = new FileWriter(path + "\\DataProgramTransactions\\ " + debutbloc + "-" + finbloc + "-transactions")) {
 
                         // file.write(arr.toJSONString());
                         file.write(rootObjectTransaction.toJSONString());
@@ -137,7 +139,7 @@ public class BuildJsonFiles {
 
                 }
 
-                System.out.println("Transactions du bloc " + i + " OK !");
+              //  System.out.println("Transactions du bloc " + i + " OK !");
             }
         }
         catch (Exception e)
