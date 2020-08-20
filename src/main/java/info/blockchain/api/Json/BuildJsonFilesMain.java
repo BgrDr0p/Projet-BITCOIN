@@ -1,12 +1,4 @@
-package info.blockchain.api;
-
-import com.google.gson.internal.$Gson$Preconditions;
-import org.apache.commons.lang3.time.StopWatch;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+package info.blockchain.api.Json;
 
 public class BuildJsonFilesMain
 {

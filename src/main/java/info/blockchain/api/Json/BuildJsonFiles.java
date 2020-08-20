@@ -1,4 +1,4 @@
-package info.blockchain.api;
+package info.blockchain.api.Json;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

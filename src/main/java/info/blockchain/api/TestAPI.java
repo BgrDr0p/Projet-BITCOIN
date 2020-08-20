@@ -16,7 +16,7 @@ public class TestAPI {
     public static void main(String[] args) throws Exception, APIException {
 
 
-
+        /*
         BlockExplorer blockExplorer = new BlockExplorer();
         StopWatch stopwatch = new StopWatch();
 
@@ -106,7 +106,7 @@ public class TestAPI {
                    continue;
                 }
 
-
+*/
 
     }
 

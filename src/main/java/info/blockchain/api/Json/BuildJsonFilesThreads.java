@@ -1,4 +1,4 @@
-package info.blockchain.api;
+package info.blockchain.api.Json;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
