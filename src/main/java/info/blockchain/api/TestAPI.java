@@ -16,7 +16,7 @@ public class TestAPI {
     public static void main(String[] args) throws Exception, APIException {
 
 
-        /*
+
         BlockExplorer blockExplorer = new BlockExplorer();
         StopWatch stopwatch = new StopWatch();
 
@@ -34,7 +34,6 @@ public class TestAPI {
                             System.out.println("Num block " + i);
                             System.out.println("Hash block " + block.getHash());
                             System.out.println("Nb de transactions " + block.getTransactions().size());
-                            //   System.out.println("Date du block " + block.getTimeHuman());
 
                             List<Transaction> tx = block.getTransactions();
                             for (int t = 0; t < block.getTransactions().size(); t++) {
@@ -47,7 +46,7 @@ public class TestAPI {
                                         System.out.println("Création monnaie ");
                                         System.out.println("ici " + inputs.indexOf(in));
                                         continue;
-                                        //in.getPreviousOutput()
+
 
 
                                     }
@@ -75,8 +74,6 @@ public class TestAPI {
 
                                         System.out.println("Montant Compte emetteur BITCOIN " + out.getValueBTC());
 
-                                        //System.out.println("ici " + inputs.indexOf(in));
-                                        //System.out.println("ici " + inputs.indexOf(in));
                                     }
 
                                 }
@@ -106,7 +103,7 @@ public class TestAPI {
                    continue;
                 }
 
-*/
+
 
     }
 
