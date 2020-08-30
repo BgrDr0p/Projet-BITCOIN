@@ -55,7 +55,7 @@ public class TestAPI {
                                         System.out.println("@ICI " +  in.getPreviousOutput().getTxIndex());
                                         System.out.println("@Emetteur " + in.getPreviousOutput().getAddress());
                                         System.out.println("Montant Compte emetteur BITCOIN " + in.getPreviousOutput().getValueBTC());
-
+                                        System.
                                     }
 
 
